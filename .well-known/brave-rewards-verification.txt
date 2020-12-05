@@ -1,4 +1,4 @@
 This is a Brave Rewards publisher verification file.
 
 Domain: sheeeev66.github.io
-Token: f211247200c74e0006c8cfd6c980a9e0c488608debb465ad24ae8760b4ec6240
+Token: 81e766ba1caee693c00a942e2a74d979a87ff477d5affa1b6567ddeb7779b6a9
