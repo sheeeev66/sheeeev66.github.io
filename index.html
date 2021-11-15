@@ -4,8 +4,11 @@
 		<script src="./script.js"
 		type="application/javascript"></script>
   	</head>
+	    <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
   	<body>
-	  
+		<div id="txStatus"></div>
+
 	<!--
     <h1>Hello World</h1>
     <p>I'm hosted with GitHub Pages.</p>
@@ -32,5 +35,21 @@
 	  -->
 	    <input type="text" name="addressInput" id="addressInput">
 	    <button type="button" onclick="addToWhitelist()">sign</button>
+		<script type="module">
+			import { ethers } from "./ethers.js";
+			// Your code here...
+			const provider = ethers.provider.Web3Provider(window.ethereum);
+			const signer = provider.getSigner();
+
+			function addToWhitelist() {
+				$("#txStatus").text("Creating whitlist message and sig");
+
+				let address = document.getElementById("addressInput").value;
+
+				let signature = await signer.signMessage(address + "airdrop").then(alert(signature));
+				$("#txStatus").text("signature: " + signature)
+				
+			}
+		</script>
     </body>
 </html>
