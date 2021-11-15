@@ -1,4 +1,4 @@
-import { ethers } from "ethers.js";
+import { ethers } from "./ethers.js";
 // Your code here...
 const provider = ethers.provider.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
