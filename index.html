@@ -1,55 +1,84 @@
 <!DOCTYPE html>
-<html>
-  	<head>
-		<script src="./script.js"
-		type="application/javascript"></script>
-  	</head>
-	    <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Traditionerative Art</title>
+    <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="web3.min.js"></script>
+    <script language="javascript" type="text/javascript" src="traditionerative_art_abi.js"></script>
+  </head>
+  <body>
+    <div id="txStatus"></div>
+    <div id="sig"></div>
 
-  	<body>
-		<div id="txStatus"></div>
+    <!-- Mint --> 
+    <label for="address">How many tokens to do want to mint?</label> <br>
+    <input type="text" name="address" id="address">
+    <button type="button" onclick="addToWhitelist()">Sign</button>
 
-	<!--
-    <h1>Hello World</h1>
-    <p>I'm hosted with GitHub Pages.</p>
-    <h4>If you have any idea how I can install wordpress here so please help me out lol</h4>
-	  -->
-<!-- Ad
-    <iframe
-		src="https://viewm.moonicorn.network/#%7B%22options%22%3A%7B%22publisherAddr%22%3A%220x294c7FCab8990D3289B6149dd673b00eb2506E55%22%2C%22whitelistedTokens%22%3A%5B%220x6B175474E89094C44Da98b954EedeAC495271d0F%22%5D%2C%22whitelistedType%22%3A%22legacy_300x250%22%2C%22randomize%22%3Atrue%2C%22targeting%22%3A%5B%5D%2C%22width%22%3A%22300%22%2C%22height%22%3A%22250%22%2C%22minPerImpression%22%3A%220%22%2C%22fallbackUnit%22%3Anull%2C%22marketSlot%22%3A%22QmSAujAYWQgrTnQgZCj93mBmBPvhCigPUCYDsNuUksuyNY%22%7D%7D"
-		width="300"
-		height="250"
-		scrolling="no"
-		frameborder="0"
-		style="border: 0;"
-		onload="window.addEventListener('message', function(ev) { 
-			if (ev.data.hasOwnProperty('adexHeight') && ('https://viewm.moonicorn.network' === ev.origin)) {
-				for (let f of document.getElementsByTagName('iframe')) {	
-					if (f.contentWindow === ev.source) {
-						f.height = ev.data.adexHeight;
-					}
-				}	
-			}
-		}, false)"
-	></iframe>
-	  -->
-	    <input type="text" name="addressInput" id="addressInput">
-	    <button type="button" onclick="addToWhitelist()">sign</button>
-		<script type="module">
-			import { ethers } from "./ethers.js";
-			// Your code here...
-			const provider = ethers.provider.Web3Provider(window.ethereum);
-			const signer = provider.getSigner();
+    <script>
+      var traditionerativeArt;
+      var userAccount;
+      
+      // start app:
+      function startApp() {
+        // var tgaAdress = "YOUR_CONTRACT_ADDRESS";
+        // traditionerativeArt = new web3js.eth.Contract(traditionerativeArtABI, tgaAdress);
 
-			function addToWhitelist() {
-				$("#txStatus").text("Creating whitlist message and sig");
+        var accountInterval = setInterval(function() {
+          // Check if account has changed
+          if (web3.eth.accounts[0] !== userAccount) {
+            userAccount = web3.eth.accounts[0];
+            // Call a function to update the UI with the new account
 
-				let address = document.getElementById("addressInput").value;
+          }
+        }, 100);
+      }
+      
+      
+      // whitelist:
+      function addToWhitelist() {
+        // waiting for the user to sign, so update the UI to let the user know
+        // that it's adding to the whitelist
+        $("#txStatus").text("Adding To Whitelist");
+        // get the value of the input field with id="address"
+        let addressToAdd = document.getElementById("address").value;
+        // message hash
+        let messageHash = addressToAdd + "whitelist";
+        // Send the tx to our contract:
+        return web3.eth.sign(messageHash, web3)
+        .then((result) => {
+          console.log;
+          $("#txStatus").text("Successfully added " + addressToAdd + " to the whitelist");
+          $("#sig").text("Sig: " + result);
+        })
+        .on("error", function(error) {
+          // Do something to alert the user their transaction has failed
+          $("#txStatus").text(error);
+        });
+      }
 
-				let signature = await signer.signMessage(address + "airdrop").then(alert(signature));
-				$("#txStatus").text("signature: " + signature)
-				
-			}
-		</script>
-    </body>
+
+
+
+      ///// web3js implementation:
+      window.addEventListener('load', function() {
+
+        // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+        if (typeof web3 !== 'undefined') {
+          // Use Mist/MetaMask's provider
+          App.web3Provider = web3.currentProvider;
+          web3 = new Web3(web3.currentProvider);
+        } else {
+          // Handle the case where the user doesn't have Metamask installed
+          // Probably show them a message prompting them to install Metamask
+          alert("Install metamask")
+        }
+
+        // Now you can start your app & access web3 freely:
+        startApp()
+
+      })
+    </script>
+  </body>
 </html>
