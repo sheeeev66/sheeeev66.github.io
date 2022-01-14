@@ -5,7 +5,6 @@
     <title>Traditionerative Art</title>
     <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script language="javascript" type="text/javascript" src="node_modules/web3/dist/web3.min.js"></script>
-    <script language="javascript" type="text/javascript" src="traditionerative_art_abi.js"></script>
   </head>
   <body>
     <div id="txStatus"></div>
@@ -17,8 +16,7 @@
     <button type="button" onclick="addToWhitelist()">Sign</button>
 
     <script>
-      const accounts = await web3.eth.getAccounts();
-
+      const accounts = await ethereum.request({ method: 'eth_accounts' });
       var Web3 = require('web3');
       var web3;
 
